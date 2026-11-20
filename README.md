@@ -25,7 +25,7 @@ With a 64-byte receive buffer, the server receives only the first 64 bytes of an
 
 In the Kali test shown below, the client sends a message ending in `B`. The server runs with a 64-byte buffer and displays the leading `A` characters. The final `B` is absent from the server output.
 
-![Step 5: truncation with a 64-byte receive buffer](/images/Step5_1.jpeg)
+![Step 5: truncation with a 64-byte receive buffer](/imagesTP2TP/Step5_1.jpeg)
 The Kali capture shows the server receiving a long message with a 65,507-byte buffer.
 
 
@@ -39,7 +39,7 @@ We launched the server with receive buffers of 64, 2,048, and 65,507 bytes. The 
 
 The copied output shows shorter strings than expected across all three tests. These excerpts alone do not confirm the number of bytes received.
 
-![Step 5 — Receive buffer tests](images/step5.PNG)
+![Step 5 — Receive buffer tests](imagesTP2/step5.PNG)
 
 The Kali capture shows the server receiving a long message with a 65,507-byte buffer.
 
@@ -56,7 +56,7 @@ On Kali, we started the server with `java UDPServer 8080 65507` and ran `java Da
 
 The largest payload that arrived was 65,507 bytes. With a standard 20-byte IPv4 header and an 8-byte UDP header, the maximum UDP payload is 65,535 − 20 − 8 = 65,507 bytes. The final attempt exceeded that limit by one byte.
 
-![Step 6: sent sizes, received sizes, and the oversized send error](/images/Step6.jpeg)
+![Step 6: sent sizes, received sizes, and the oversized send error](/imagesTP2/Step6.jpeg)
 
 
 The Windows run with `UDPSizeTest` showed the same limit. Windows reported `The message is larger than the maximum supported by the underlying transport: sendto` for the last send.
@@ -90,7 +90,7 @@ The four UDP header fields are Source Port, Destination Port, Length, and Checks
 
 In the Wireshark screenshot, the source port is 50501, the destination port is 8080, the UDP Length field is 15 bytes, and the checksum is `0x8aa8` (unverified by Wireshark).
 
-![Step 7 — UDP header in Wireshark](images/step7.PNG)
+![Step 7 — UDP header in Wireshark](imagesTP2/step7.PNG)
 
 ## Step 8 — Receive buffer and datagram size
 
@@ -118,19 +118,19 @@ With an MTU of 1,500 bytes, a standard 20-byte IPv4 header and an 8-byte UDP hea
 
 The client sent messages before the server was running. Since UDP does not establish a connection or wait for an acknowledgment, the client can send without displaying an error. The messages sent before the server started were discarded. Once the server was listening, it displayed the new message.
 
-![Step 9a — Messages sent before and after the server starts](/images/Step9a.PNG)
+![Step 9a — Messages sent before and after the server starts](/imagesTP2/Step9a.PNG)
 
 ### b. Sending messages to closed UDP ports
 
 When a datagram is sent to a closed UDP port, the destination can reply with an ICMP **Destination Unreachable — Port Unreachable** message (type 3, code 3). In Wireshark, the UDP header embedded in the ICMP reply shows which destination port was unreachable.
 
-![Step 9b — ICMP Port Unreachable messages in Wireshark](images/Step9b.PNG)
+![Step 9b — ICMP Port Unreachable messages in Wireshark](imagesTP2/Step9b.PNG)
 
 ### c. Restarting the client while the server is running
 
 The server kept listening on port 8080 when the client stopped. It received no notification that the client had closed. Both client instances used the same source IP address, `127.0.0.1`, and used different source ports. The operating system assigned a source port each time the client opened a new UDP socket.
 
-![Step 9c — Source ports of two successive UDP clients](/images/step9c.PNG)
+![Step 9c — Source ports of two successive UDP clients](/imagesTP2/step9c.PNG)
 
 ## Step 10 — UDP and TCP
 
@@ -150,7 +150,7 @@ In experiment c, the server can detect a normal TCP closure when it reads the en
 
 The client prefixes each message with a sequence number starting at `0`. The server extracts the number and displays it next to the message. In the localhost test, the server received three messages in order and displayed `#0`, `#1`, and `#2`.
 
-![Step 11 — Three UDP messages received in sequence](/images/Step11.PNG)
+![Step 11 — Three UDP messages received in sequence](/imagesTP2/Step11.PNG)
 
 The server also checks the next expected sequence number. For example, if it expects `1` and receives `2`, it reports a gap. If `1` arrives afterward, the server reports it as late or duplicate.
 
@@ -162,7 +162,7 @@ The client waits up to 500 ms for the matching acknowledgment. If it times out, 
 
 In the localhost test, the server received message `#0` and the client displayed `Received ACK:0`.
 
-![Step 12 — The client receives ACK:0 after sending message 0](/images/Step12.PNG)
+![Step 12 — The client receives ACK:0 after sending message 0](/imagesTP2/Step12.PNG)
 
 ## Step 13 — Measuring UDP Packet Loss
 
@@ -179,13 +179,13 @@ In the localhost test, the server received message `#0` and the client displayed
 
 We measured 24.46% packet loss. Even on localhost, a fast burst can fill the operating system's UDP receive queue. Once the queue is full, incoming datagrams can be dropped before the Java program reads them.
 
-![Step 13a — Localhost without receiver delay](images/Step13_localhost_0.jpeg)
+![Step 13a — Localhost without receiver delay](imagesTP2/Step13_localhost_0.jpeg)
 
 ### b. Between two machines without delay
 
 We measured 5.67% packet loss between the two machines. The loss rate depends on how quickly datagrams arrive and how quickly the receiver reads them.
 
-![Step 13b — Two machines without receiver delay](images/Step13_betweenmachines_0.PNG)
+![Step 13b — Two machines without receiver delay](imagesTP2/Step13_betweenmachines_0.PNG)
 
 ### c. Tests with a 5 ms receiver delay
 
@@ -193,9 +193,9 @@ The receiver waited 5 ms after each datagram. This slowed down the rate at which
 
 **Localhost.** Packet loss increased from 24.46% to 97.77%.
 
-![Step 13c — Localhost with a 5 ms receiver delay](images/Step13_localhost_5.jpeg)
+![Step 13c — Localhost with a 5 ms receiver delay](imagesTP2/Step13_localhost_5.jpeg)
 
 **Between two machines.** Packet loss increased from 5.67% to 44.38%.
 
-![Step 13c — Two machines with a 5 ms receiver delay](images/Step13_betweenmachines_5.PNG)
+![Step 13c — Two machines with a 5 ms receiver delay](imagesTP2/Step13_betweenmachines_5.PNG)
 
