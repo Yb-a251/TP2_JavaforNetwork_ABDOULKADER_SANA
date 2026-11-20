@@ -196,6 +196,7 @@ The receiver waited 5 ms after each datagram. This slowed down the rate at which
 ![Step 13c — Localhost with a 5 ms receiver delay](imagesTP2/Step13_localhost_5.jpeg)
 
 **Between two machines.** Packet loss increased from 5.67% to 44.38%.
+![Step 13c — Two machines with a 5 ms receiver delay](imagesTP2/Step13_betweenmachines_5.PNG)
 
 ## Step 15 - Retransmission Timeout and Comparison with TCP
 
@@ -211,5 +212,5 @@ The timeout should allow enough time for the message to reach the server and for
 We added sequence numbers, acknowledgments, retransmissions after a timeout, and duplicate detection. The client waits for each ACK before sending the next message and gives up after three attempts.
 
 Our implementation still lacks TCP's connection setup and teardown, sliding window, flow control, congestion control, and adaptive retransmission timeout. TCP also delivers an ordered byte stream. Our server can report a gap in message numbers, and it can still process later messages if the client gives up on an earlier one.
-![Step 13c — Two machines with a 5 ms receiver delay](imagesTP2/Step13_betweenmachines_5.PNG)
+
 
