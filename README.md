@@ -25,7 +25,7 @@ With a 64-byte receive buffer, the server receives only the first 64 bytes of an
 
 In the Kali test shown below, the client sends a message ending in `B`. The server runs with a 64-byte buffer and displays the leading `A` characters. The final `B` is absent from the server output.
 
-![Step 5: truncation with a 64-byte receive buffer](/imagesTP2TP/Step5_1.jpeg)
+![Step 5: truncation with a 64-byte receive buffer](/imagesTP2/Step5_1.jpeg)
 The Kali capture shows the server receiving a long message with a 65,507-byte buffer.
 
 
